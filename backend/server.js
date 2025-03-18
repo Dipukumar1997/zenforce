@@ -18,7 +18,7 @@
 
 // app.listen(port ,()=>console.log(`server started on PORT : ${port}`));
 import express from "express";
-import connectDB from "../server/config/mongodb.js";
+import connectDB from "../backend/config/mongodb.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./Routes/authroutes.js";
