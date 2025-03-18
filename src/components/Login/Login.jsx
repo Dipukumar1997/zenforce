@@ -97,6 +97,8 @@ const onSubmitHandler = async (e) => {
       }
     }
   } catch (error) {
+    console.log("Error:", error); 
+    console.log("Backend URL:", backendUrl);
     // Properly handling errors
     toast.error(error?.response?.data?.message || "Something went wrong");
   }

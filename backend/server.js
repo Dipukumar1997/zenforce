@@ -41,10 +41,7 @@ const allowedOrigins = ["https://zenforce.vercel.app"]; // Removed trailing slas
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  credentials: true,
-  origin: allowedOrigins, // Now allows credentials
-}));
+app.use(cors({ origin: "https://backend1997.vercel.app", credentials: true }));
 
 // Test route
 app.get("/", (req, res) => {
