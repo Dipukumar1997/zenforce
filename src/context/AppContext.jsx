@@ -23,7 +23,7 @@ const getAuthState =async()=>{
       getUserData();
     }
   } catch (error) {
-    toast.error(error.message);
+    toast.error("error.message");
   }
 }
   const getUserData = async () => {  // Fixed arrow function syntax
