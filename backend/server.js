@@ -28,15 +28,15 @@ import userRouter from "./Routes/userRoutes.js"; // Fixed typo
 dotenv.config(); // Load environment variables
 
 // Debugging SMTP credentials
-console.log("SMTP_USER:", process.env.SMTP_USER);
-console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
+// console.log("SMTP_USER:", process.env.SMTP_USER);
+// console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
 
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB(); // Connect to MongoDB
 
 // CORS Configuration
-const allowedOrigins = ["http://localhost:3000"]; // Removed trailing slash
+const allowedOrigins = ["https://zenforce.vercel.app/"]; // Removed trailing slash
 
 // Middleware
 app.use(express.json());
