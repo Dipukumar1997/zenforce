@@ -1,0 +1,55 @@
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, rgb(12, 12, 12), black);
+}
+
+.calculator {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* General Input Styles */
+/* /* Using :where (lower specificity) */ 
+.calculator  :where(input) {
+    border: none;
+    outline: 0;
+    width: 60px;
+    height: 60px;
+    font-size: 16px;
+    background-color: rgb(91, 91, 100);
+    margin: 2px;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+/* Input field styling */
+.calculator input[type="text"] {
+    width: 100%;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    margin: 5px 0px 15px 0px;
+    background-color: rgb(71, 71, 63);
+    color: white;
+    border-radius: 0%;
+    cursor: text;
+    text-align: right;
+}
+
+/* Button hover effect */
+.calculator input[type="button"]:hover {
+    background-color: rgb(144, 144, 175);
+}
+
+/* Equal button width */
+.equal {
+    width: 123px;
+}
