@@ -54,15 +54,66 @@ export default function  Login () {
 //     toast.error(error);
 //   }
 // }
-const onSubmitHandler = async (e) => {
-  setLoading(true); // Show loader
-  // toast.success("Login successful! 🎉"); // ✅ Toast should work
-  try {
-    e.preventDefault();
-    // toast.error(data.message);
+// const onSubmitHandler = async (e) => {
+//   setLoading(true); // Show loader
+//   // toast.success("Login successful! 🎉"); // ✅ Toast should work
+//   try {
+//     e.preventDefault();
+//     // toast.error(data.message);
      
     
    
+//     axios.defaults.withCredentials = true; // Pass cookies also
+
+//     if (state === "Sign Up") {
+//       const { data } = await axios.post(backendUrl + "/api/auth/register", {
+//         name,
+//         email,
+//         password,
+//       });
+
+//       if (data.success) {
+//         toast.success(data.message);
+//         getUserData()
+//         setIsLoggedin(true);
+//         Navigate("/developer");
+//       } else {
+//         toast.error(data.message); // This should be correct, as data is defined here
+//       }
+//     } else {
+//       // If state is not Sign Up
+//       const { data } = await axios.post(backendUrl + "/api/auth/login", {
+//         email,
+//         password,
+//       });
+
+//       if (data.success) {
+//         toast.success(data.message);
+//         getUserData();
+//         setIsLoggedin(true);
+//         Navigate("/developer");
+//       } else {
+//         toast.error(data.message);
+//       }
+//     }
+//   } catch (error) {
+//     console.log("Error:", error); 
+//     console.log("Backend URL:", backendUrl);
+//     // Properly handling errors
+//     toast.error(error?.response?.data?.message || "Something went wrong");
+//   }
+//   finally {
+//     setLoading(false); // Hide loader after request completes
+//   }
+// };
+
+
+
+const onSubmitHandler = async (e) => {
+  setLoading(true); // Show loader
+
+  try {
+    e.preventDefault();
     axios.defaults.withCredentials = true; // Pass cookies also
 
     if (state === "Sign Up") {
@@ -74,14 +125,21 @@ const onSubmitHandler = async (e) => {
 
       if (data.success) {
         toast.success(data.message);
-        getUserData()
+
+        // Store token in localStorage
+        localStorage.setItem("token", data.token); 
+
+        // Attach token to all Axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+
+        await getUserData();
         setIsLoggedin(true);
         Navigate("/developer");
       } else {
-        toast.error(data.message); // This should be correct, as data is defined here
+        toast.error(data.message);
       }
+
     } else {
-      // If state is not Sign Up
       const { data } = await axios.post(backendUrl + "/api/auth/login", {
         email,
         password,
@@ -89,7 +147,14 @@ const onSubmitHandler = async (e) => {
 
       if (data.success) {
         toast.success(data.message);
-        getUserData();
+
+        // Store token after successful login
+        localStorage.setItem("token", data.token); 
+
+        // Attach token to all Axios requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+
+        await getUserData();
         setIsLoggedin(true);
         Navigate("/developer");
       } else {
@@ -99,10 +164,8 @@ const onSubmitHandler = async (e) => {
   } catch (error) {
     console.log("Error:", error); 
     console.log("Backend URL:", backendUrl);
-    // Properly handling errors
     toast.error(error?.response?.data?.message || "Something went wrong");
-  }
-  finally {
+  } finally {
     setLoading(false); // Hide loader after request completes
   }
 };
