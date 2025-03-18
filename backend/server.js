@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
 // fixFieldName();
 // Routes
 app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 
 // Start server
 app.listen(port, () => console.log(`Server running on port ${port}`));
