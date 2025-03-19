@@ -20,7 +20,7 @@ const getAuthState =async()=>{
     const {data} = await axios.get(backendUrl+'/api/auth/is-auth');
     if (data.success) {
       setIsLoggedin(true);
-      getUserData();
+      await  getUserData();
     }
   } catch (error) {
     toast.error(error.message);
