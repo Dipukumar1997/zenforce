@@ -18,35 +18,62 @@
 
 // app.listen(port ,()=>console.log(`server started on PORT : ${port}`));
 import express from "express";
-// import connectDB from "../backend/config/mongodb.js";
+import connectDB from "../backend/config/mongodb.js";  // Ensure path is correct
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./Routes/authroutes.js";
 import cookieParser from "cookie-parser";
-import userRouter from "./Routes/userRoutes.js"; // Fixed typo
+import userRouter from "./Routes/userRoutes.js";
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 // Debugging SMTP credentials
-// console.log("SMTP_USER:", process.env.SMTP_USER);
-// console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
+console.log("SMTP_USER:", process.env.SMTP_USER);
+console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
 
 const app = express();
-// const port = process.env.PORT || 4000;
-// connectDB(); // Connect to MongoDB
+const PORT = process.env.PORT || 5000;  // Use Vercel's PORT
+connectDB();
 
 // CORS Configuration
-const allowedOrigins = ["https://zenforce.vercel.app"]; // Removed trailing slash
-
-// Middleware
+const allowedOrigins = ["http://localhost:3002"];
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "https://zenforce.vercel.app", credentials: true }));
+app.use(
+  cors({
+    credentials: true,
+    origin: allowedOrigins,
+  })
+);
 
 // Test route
 app.get("/", (req, res) => {
   res.send("API working");
 });
+
+// Routes
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+
+// Start server
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const fixFieldName = async () => {
 //   try {
 //     await mongoose.connect(process.env.MONGO_URI, {
@@ -65,32 +92,6 @@ app.get("/", (req, res) => {
 //     console.error("Error:", error);
 //   }
 // };
-
-// fixFieldName();
-// Routes
-// app.use("/api/auth", authRouter);
-// app.use("/api/user", userRouter);
-
-// Start server
-// app.listen(port, () => console.log(`Server running on port ${port}`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
