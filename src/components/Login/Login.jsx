@@ -140,7 +140,7 @@ const onSubmitHandler = async (e) => {
       }
 
     } else {
-      const { data } = await axios.post(backendUrl + "/api/auth/login", {
+      const { data } = await axios.post(backendUrl + "api/auth/login", {
         email,
         password,
       });
