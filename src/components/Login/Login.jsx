@@ -71,7 +71,7 @@ const onSubmitHandler = async (e) => {
         name,
         email,
         password,
-      });
+      },{ withCredentials: true });
       console.log("printing the data in sign up coming from backend "+data);
 
       if (data.success) {
@@ -90,7 +90,7 @@ const onSubmitHandler = async (e) => {
       const { data } = await axios.post(backendUrl + "/api/auth/login", {
         email,
         password,
-      });
+      }, { withCredentials: true });
       console.log("printing the data in login in coming from backend "+data);
 
       if (data.success) {

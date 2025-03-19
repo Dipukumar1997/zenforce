@@ -65,13 +65,13 @@ export const login = async (req, res) => {
             return res.json({ success: false, message: "invalid password  " });
         }
 
-        const token = jwt.sign({ id: user._id, email: user.email  }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user._id, email: user.email  }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-        res.cookie('token', token, {
+        res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ Fixed: Corrected maxAge calculation for 7 days
+            secure: process.env.NODE_ENV === "production",  // Only secure in production
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days expiration
         });
 
         const mailOptions = {
