@@ -15,17 +15,46 @@ export const AppContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null); // Changed from `false` to `null`
   
-const getAuthState =async()=>{
+// const getAuthState =async()=>{
+//   try {
+//     const {data} = await axios.get(backendUrl+'/api/auth/is-auth');
+//     if (data.success) {
+//       setIsLoggedin(true);
+//       await  getUserData();
+//     }
+//   } catch (error) {
+//     toast.error(error.message);
+//   }
+// }
+
+
+
+const getAuthState = async () => {
   try {
-    const {data} = await axios.get(backendUrl+'/api/auth/is-auth');
+    const token = localStorage.getItem("token"); // ✅ Get token from localStorage
+
+    if (!token) {
+      toast.error("No token found. Please log in again.");
+      return;
+    }
+
+    const { data } = await axios.get(backendUrl + "/api/auth/is-auth", {
+      headers: {
+        Authorization: `Bearer ${token}` // ✅ Send token in Authorization header
+      }
+    });
+
     if (data.success) {
       setIsLoggedin(true);
-      await  getUserData();
+      await getUserData();
     }
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response?.data?.message || "Authentication failed.");
+    setIsLoggedin(false);
+    localStorage.removeItem("token"); // ✅ Clear token if authentication fails
   }
-}
+};
+
   const getUserData = async () => {  // Fixed arrow function syntax
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
