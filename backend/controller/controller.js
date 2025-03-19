@@ -123,9 +123,12 @@ export const logout = async (req, res) => {
 export const sendverfifyOtp = async (req, res) => {
     try {
         // const user = await userModel.findOne({ email });
-        const { userId } = req.body;
+        const { userId , email} = req.body;
         const user = await userModel.findById(userId);
-        const user1 = await userModel.findOne({ email });
+        // const user1 = await userModel.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
 
         if (user.isAccountverfied) {
             return res.json({ success: false, message: "Account already verfiled " });
@@ -146,8 +149,9 @@ export const sendverfifyOtp = async (req, res) => {
         await transporter.sendMail(mailOptions);
         res.json({ success: true, message: "OTP send succesfufully " })
     } catch (error) {
+        console.log("error in send verify otp "+ error);
+        console.log("checking that is it falling into the catch blcok of controller .js");
         return res.json({ success: false, message: error.message });
-
     }
 }
 
