@@ -58,7 +58,9 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import dotenv from "dotenv";
 
+dotenv.config(); 
 export const AppContent = createContext();
 
 export const AppContextProvider = (props) => {
