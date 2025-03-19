@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 // import Loader from "../Loader";
 //  import ButtonWithLoader from "../Loader";
 import "react-toastify/dist/ReactToastify.css";
+import dotenv from "dotenv";
+dotenv.config();
 import ButtonWithLoader from "../Loader";
 // import resetPassword from 
 export default function  Login () {
@@ -140,7 +142,7 @@ const onSubmitHandler = async (e) => {
       }
 
     } else {
-      const { data } = await axios.post(backendUrl + "api/auth/login", {
+      const { data } = await axios.post(backendUrl + "/api/auth/login", {
         email,
         password,
       });
