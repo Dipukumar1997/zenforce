@@ -92,7 +92,7 @@ export const AppContextProvider = (props) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/api/user/data`);
+      const { data } = await axios.get(backendUrl+"/");
 
       if (data.success) {
         setUserData(data.userData);

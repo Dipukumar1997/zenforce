@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import userModel from "../models/userModel.js";
 export const getuserdata =  async (req, res) => {
     try {
@@ -14,6 +15,6 @@ export const getuserdata =  async (req, res) => {
             }
         });
     } catch (error) {
-
+        toast.error("in userController.js");
     }
 } 
