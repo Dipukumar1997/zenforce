@@ -69,53 +69,27 @@ export const AppContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null);
 
-  // const getAuthState = async () => {
-  //   try {
-  //     const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
-  //     console.log(data);
-  //     if (data.success) {
-  //       const userResponse = await getUserData();  // ✅ Wait for `getUserData()`
-  //       // console.log(first)
-  //       if (userResponse) {
-  //         setIsLoggedin(true);   // ✅ Only log in if user data is valid
-  //       } else {
-  //         setIsLoggedin(false);  // ✅ Prevent login if no user data
-  //       }
-  //     } else {
-  //       setIsLoggedin(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Auth check failed:", error.message);
-  //     toast.error(error.message);
-  //   }
-  // };
-
   const getAuthState = async () => {
     try {
-      const token = localStorage.getItem("token");  // Retrieve token from storage
-      if (!token) {
-        throw new Error("No token found");
-      }
-  
-      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-        headers: {
-          Authorization: `Bearer ${token}`  // Include the token
-        }
-      });
-  
+      const { data } = await axios.get(`${backendUrl}/api/user/is-auth`);
       console.log(data);
       if (data.success) {
-        const userResponse = await getUserData();
-        setIsLoggedin(!!userResponse);  // Set login status based on user data
+        const userResponse = await getUserData();  // ✅ Wait for `getUserData()`
+        // console.log(first)
+        if (userResponse) {
+          setIsLoggedin(true);   // ✅ Only log in if user data is valid
+        } else {
+          setIsLoggedin(false);  // ✅ Prevent login if no user data
+        }
       } else {
         setIsLoggedin(false);
       }
     } catch (error) {
       console.error("Auth check failed:", error.message);
-      toast.error(error.response?.data?.message || "Authentication failed");
+      toast.error(error.message);
     }
   };
-  
+
   const getUserData = async () => {
     try {
       const { data } = await axios.get(`${backendUrl}/api/user/data`);
@@ -136,9 +110,9 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  useEffect(() => {
-    getAuthState();
-  }, []);
+  // useEffect(() => {
+  //   getAuthState();
+  // }, []);
 
   const value = {
     backendUrl,

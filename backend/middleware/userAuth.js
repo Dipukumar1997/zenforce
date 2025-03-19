@@ -31,7 +31,7 @@ const userAuth = (req, res, next) => {
 
 
     if (!token) {
-        const token = "jjjjj"+req.cookies.token ;
+        // const token = "jjjjj"+req.cookies.token ;
         return res.status(401).json({ success: false, message: "Not authorized, login again" });
     }
 
