@@ -33,7 +33,7 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 // const port = process.env.PORT || 4000;
-connectDB(); // Connect to MongoDB
+// connectDB(); // Connect to MongoDB
 
 // CORS Configuration
 const allowedOrigins = ["https://zenforce.vercel.app"]; // Removed trailing slash
