@@ -72,13 +72,17 @@ const onSubmitHandler = async (e) => {
         email,
         password,
       });
+      console.log("printing the data in sign up coming from backend "+data);
 
       if (data.success) {
         toast.success(data.message);
         getUserData()
+        console.log("pritng the get userdata"+getUserData());
         setIsLoggedin(true);
         Navigate("/developer");
       } else {
+        console.log(" in the sign up else ")
+        // clf
         toast.error(data.message); // This should be correct, as data is defined here
       }
     } else {
@@ -87,6 +91,7 @@ const onSubmitHandler = async (e) => {
         email,
         password,
       });
+      console.log("printing the data in login in coming from backend "+data);
 
       if (data.success) {
         toast.success(data.message);
