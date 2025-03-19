@@ -28,11 +28,11 @@ import userRouter from "./Routes/userRoutes.js"; // Fixed typo
 dotenv.config(); // Load environment variables
 
 // Debugging SMTP credentials
-console.log("SMTP_USER:", process.env.SMTP_USER);
-console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
+// console.log("SMTP_USER:", process.env.SMTP_USER);
+// console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
 
 const app = express();
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 4000;
 connectDB(); // Connect to MongoDB
 
 // CORS Configuration
@@ -68,11 +68,11 @@ app.get("/", (req, res) => {
 
 // fixFieldName();
 // Routes
-app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
+// app.use("/api/auth", authRouter);
+// app.use("/api/user", userRouter);
 
 // Start server
-app.listen(port, () => console.log(`Server running on port ${port}`));
+// app.listen(port, () => console.log(`Server running on port ${port}`));
 
 
 
