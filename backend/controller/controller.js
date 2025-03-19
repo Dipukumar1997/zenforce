@@ -123,8 +123,8 @@ export const logout = async (req, res) => {
 export const sendverfifyOtp = async (req, res) => {
     try {
         // const user = await userModel.findOne({ email });
-        const { userId , email} = req.body;
-        const user = await userModel.findById(userId);
+        const { email} = req.body;
+        const user = await userModel.findOne({ email });  // Query by `email`
         // const user1 = await userModel.findOne({ email });
         if (!user) {
             return res.json({ success: false, message: "User not found" });
