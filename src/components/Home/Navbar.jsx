@@ -97,11 +97,12 @@ export const Navbar = () => {
         try {
             axios.defaults.withCredentials = true;
             const { data } = await axios.post(backendUrl + "/api/auth/send-verify-otp");
+            console.log("in send verifiction-otp "+data);
             if (data.success) {
                 navigate('/email-verify');
                 toast.success(data.message);
             } else {
-                toast.error("data.message");
+                toast.error(data.message);
             }
         } catch (error) {
             toast.error(error.message);
