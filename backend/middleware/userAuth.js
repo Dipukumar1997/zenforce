@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 const userAuth = async (req,res,next)=>{
-    const {token} = req.cookies;
+    const token = req.cookies.token;  
+    console.log("Cookies:", req.cookies);
+    console.log("Cookies token:", req.cookies);
+    // const token = req.cookies.token;  
     if (!token) {
         return res.json({sucess:false, message: 'not authrozied login again'})
     }
@@ -19,6 +22,7 @@ const userAuth = async (req,res,next)=>{
     //    req.body.email = user.email; // ✅ Now logout can access `req.body.email`
        next();
     } catch (error) {
+        console.error("Authentication error:", error);
         res.json({sucess:false, message:"error.message"})
     }
 }

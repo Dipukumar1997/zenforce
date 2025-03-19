@@ -38,6 +38,7 @@ connectDB();
 // CORS Configuration
 const allowedOrigins = ["https://backend1997.vercel.app"];
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   origin: "https://zenforce.vercel.app",  // Frontend URL

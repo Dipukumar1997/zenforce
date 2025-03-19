@@ -87,7 +87,8 @@ const onSubmitHandler = async (e) => {
       }
     } else {
       // If state is not Sign Up
-      const { data } = await axios.post(backendUrl + "/api/auth/login", {
+      // clg
+      const { data } = await axios.post(backendUrl+"/api/auth/login", {
         email,
         password,
       }, { withCredentials: true });
