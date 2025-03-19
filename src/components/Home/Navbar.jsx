@@ -99,7 +99,12 @@ export const Navbar = () => {
             const { data } = await axios.post(backendUrl + "/api/auth/send-verify-otp", {
                 email: userData.email   // Send the email
             });
-            console.log("in send verifiction-otp ", data);
+            console.log("in send verifiction-otp ", JSON.stringify(data, null, 2));
+            console.log("in send verifiction-otp success:", data.success);
+            console.log("in send verifiction-otp message:", data.message);
+            // console.log("in send verifiction-otp payload:", data.payload);  // Example property
+            console.log("Backend Response:", data);  // Ensure the API returns proper JSON
+            
             if (data.success) {
                 navigate('/email-verify');
                 toast.success(data.message);
