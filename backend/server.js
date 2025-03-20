@@ -36,19 +36,19 @@ const PORT = process.env.PORT || 5000;  // Use Vercel's PORT
 connectDB();
 
 // CORS Configuration
-const allowedOrigins = ["https://backend1997.vercel.app"];
+const allowedOrigins = ["http://localhost:3002"];
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: "https://zenforce.vercel.app",  // Frontend URL
-  credentials: true,  // Allow cookies to be sent
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    credentials: true,
+    origin: allowedOrigins,
+  })
+);
+
 // Test route
 app.get("/", (req, res) => {
-  res.send("API working checking that zenforce backend is on the calcx1 https://github.com/Dipukumar1997/calcx1");
+  res.send("API working");
 });
 
 // Routes

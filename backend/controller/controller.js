@@ -45,9 +45,6 @@ export const register = async (req, res) => { // ✅ Fixed: Uncommented and prop
     }
 };
 
-
-
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -68,16 +65,13 @@ export const login = async (req, res) => {
             return res.json({ success: false, message: "invalid password  " });
         }
 
-        const token = jwt.sign({ id: user._id, email: user.email  }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        const token = jwt.sign({ id: user._id, email: user.email  }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.cookie("token", token, {
+        res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",  // Only secure in production
-            // secure:true,
-            //Lax and Strict and None 
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
-            // sameSite:"None",
-            maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days expiration
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ Fixed: Corrected maxAge calculation for 7 days
         });
 
         const mailOptions = {
@@ -123,40 +117,72 @@ export const logout = async (req, res) => {
     }
 };
 
+// export const sendverfifyOtp = async (req, res) => {
+//     try {
+//         // const user = await userModel.findOne({ email });
+//         const { userId , email  } = req.body;
+//         const user = await userModel.findById(userId);
+//         console.log("priting the user recived from the database " , user);
+//         // const user1 = await userModel.findOne({ email });
+
+//         if (user.isAccountverfied) {
+//             return res.json({ success: false, message: "Account already verfiled " });
+//         }
+
+//         const otp = String(Math.floor(100000+Math.random()*900000));
+//         user.verfiyOtp =otp;
+//         user.verfiyOtpExpireAt = Date.now()+24*60*60*1000;
+//         await user.save();
+
+//         const mailOptions = {
+//             from: process.env.SENDER_EMAIL,
+//             to: user.email,
+//             subject: "Account verfication OTP",
+//             // text: `Your OTP for verifation is ${otp} `,
+//             html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}",otp)
+//         }
+//         await transporter.sendMail(mailOptions);
+//         res.json({ success: true, message: "OTP send succesfufully " })
+//     } catch (error) {
+//         return res.json({ success: false, message: error.message });
+
+//     }
+// }
+
 export const sendverfifyOtp = async (req, res) => {
     try {
-        // const user = await userModel.findOne({ email });
-        const { email} = req.body;
-        const user = await userModel.findOne({ email });  // Query by `email`
-        // const user1 = await userModel.findOne({ email });
+        const { userId } = req.body;
+        const user = await userModel.findById(userId);
+
+        // console.log("Printing the user received from the database:", user);
+
         if (!user) {
             return res.json({ success: false, message: "User not found" });
         }
 
         if (user.isAccountverfied) {
-            return res.json({ success: false, message: "Account already verfiled " });
+            return res.json({ success: false, message: "Account already verified" });
         }
 
-        const otp = String(Math.floor(100000+Math.random()*900000));
-        user.verfiyOtp =otp;
-        user.verfiyOtpExpireAt = Date.now()+24*60*60*1000;
+        const otp = String(Math.floor(100000 + Math.random() * 900000));
+        user.verfiyOtp = otp;
+        user.verfiyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
         await user.save();
 
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
-            to: user.email,
-            subject: "Account verfication OTP",
-            // text: `Your OTP for verifation is ${otp} `,
-            html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}",otp)
-        }
+            to: user.email,  // ✅ Use user.email directly
+            subject: "Account verification OTP",
+            html: EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp)
+        };
+
         await transporter.sendMail(mailOptions);
-        res.json({ success: true, message: "OTP send succesfufully " })
+        res.json({ success: true, message: "OTP sent successfully" });
+
     } catch (error) {
-        console.log("error in send verify otp "+ error);
-        console.log("checking that is it falling into the catch blcok of controller .js");
         return res.json({ success: false, message: error.message });
     }
-}
+};
 
 export const verifyEmail = async (req,res)=>{
     const {userId, otp}= req.body;
