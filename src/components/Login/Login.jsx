@@ -55,11 +55,13 @@ export default function  Login () {
 //   }
 // }
 const onSubmitHandler = async (e) => {
-  console.log("Backend URL:", backendUrl);
+  e.preventDefault();
+  // console.log("Backend URL:", backendUrl);
   setLoading(true); // Show loader
   // toast.success("Login successful! 🎉"); // ✅ Toast should work
+  axios.defaults.withCredentials = true; // Pass cookies globally
   try {
-    e.preventDefault();
+   
     // toast.error(data.message);
      
     
@@ -67,12 +69,12 @@ const onSubmitHandler = async (e) => {
     axios.defaults.withCredentials = true; // Pass cookies also
 
     if (state === "Sign Up") {
-      const { data } = await axios.post(backendUrl + "/api/auth/register", {
+      const response = await axios.post(backendUrl + "/api/auth/register", {
         name,
         email,
         password,
-      });
-
+      }, { withCredentials: true });
+      data = response.data;
       if (data.success) {
         toast.success(data.message);
         getUserData()
@@ -83,11 +85,11 @@ const onSubmitHandler = async (e) => {
       }
     } else {
       // If state is not Sign Up
-      const { data } = await axios.post(backendUrl + "/api/auth/login", {
+      const response  = await axios.post(backendUrl + "/api/auth/login", {
         email,
         password,
-      });
-
+      }, { withCredentials: true });
+      data = response.data;
       if (data.success) {
         toast.success(data.message);
         getUserData();
