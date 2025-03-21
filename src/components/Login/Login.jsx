@@ -3,7 +3,7 @@ import { assets } from "../../assests/assets";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AppContent } from "../../context/AppContext";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 // import Loader from "../Loader";
 //  import ButtonWithLoader from "../Loader";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,40 +56,37 @@ export default function  Login () {
 // }
 const onSubmitHandler = async (e) => {
   e.preventDefault();
-  // console.log("Backend URL:", backendUrl);
-  setLoading(true); // Show loader
-  // toast.success("Login successful! 🎉"); // ✅ Toast should work
-  axios.defaults.withCredentials = true; // Pass cookies globally
+  setLoading(true); 
+  axios.defaults.withCredentials = true;
+
   try {
-   
-    // toast.error(data.message);
-     
-    
-   
-    axios.defaults.withCredentials = true; // Pass cookies also
+    let data;  // Declare the 'data' variable
 
     if (state === "Sign Up") {
-      const response = await axios.post(backendUrl + "/api/auth/register", {
+      const response = await axios.post(`${backendUrl}/api/auth/register`, {
         name,
         email,
         password,
       }, { withCredentials: true });
+
       data = response.data;
+
       if (data.success) {
         toast.success(data.message);
-        getUserData()
+        getUserData();
         setIsLoggedin(true);
         Navigate("/developer");
       } else {
-        toast.error(data.message); // This should be correct, as data is defined here
+        toast.error(data.message);
       }
     } else {
-      // If state is not Sign Up
-      const response  = await axios.post(backendUrl + "/api/auth/login", {
+      const response = await axios.post(`${backendUrl}/api/auth/login`, {
         email,
         password,
       }, { withCredentials: true });
+
       data = response.data;
+
       if (data.success) {
         toast.success(data.message);
         getUserData();
@@ -100,14 +97,13 @@ const onSubmitHandler = async (e) => {
       }
     }
   } catch (error) {
-    console.error("Error details:", error); 
-    // Properly handling errors
-    toast.error(error?.response?.data?.message || "Something went wrong");
-  }
-  finally {
-    setLoading(false); // Hide loader after request completes
+    console.error("Error details from the onSubmitHander in place of something went wrong :", error); 
+    toast.error(error?.response?.data?.message );
+  } finally {
+    setLoading(false); 
   }
 };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-t from-blue-200 to-purple-400">
