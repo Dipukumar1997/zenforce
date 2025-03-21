@@ -14,6 +14,6 @@ export const getuserdata =  async (req, res) => {
             }
         });
     } catch (error) {
-
+        
     }
 } 

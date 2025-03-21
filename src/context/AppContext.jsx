@@ -15,17 +15,23 @@ export const AppContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null); // Changed from `false` to `null`
   
-const getAuthState =async()=>{
-  try {
-    const {data} = await axios.get(backendUrl+'/api/auth/is-auth');
-    if (data.success) {
-      setIsLoggedin(true);
-      getUserData();
+  const getAuthState = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+      if (data.success) {
+        setIsLoggedin(true);
+        getUserData();
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // Do nothing or handle silently
+        setIsLoggedin(false);
+      } else {
+        toast.error(error.message);  // Show toast only for other errors
+      }
     }
-  } catch (error) {
-    toast.error(error.message);
-  }
-}
+  };
+  
   const getUserData = async () => {  // Fixed arrow function syntax
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
