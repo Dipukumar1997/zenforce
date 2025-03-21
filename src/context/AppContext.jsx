@@ -1,58 +1,119 @@
-import { createContext, useEffect, useState } from "react";
+// import { createContext, useEffect, useState } from "react";
+// import { toast } from "react-toastify";
+// import axios from "axios"
+// export const AppContent = createContext();
+
+// export const AppContextProvider = (props) => {
+//   axios.defaults.withCredentials =true;
+//   // Corrected environment variable usage
+// //   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+//     const backendUrl = process.env.REACT_APP_BACKEND_URL;
+//     // console.log("Backend URL:", backendUrl); // Debugging
+
+
+
+//   const [isLoggedin, setIsLoggedin] = useState(false);
+//   const [userData, setUserData] = useState(null); // Changed from `false` to `null`
+  
+//   const getAuthState = async () => {
+//     try {
+//       const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+//       if (data.success) {
+//         setIsLoggedin(true);
+//         getUserData();
+//       }
+//     } catch (error) {
+//       if (error.response && error.response.status === 401) {
+//         // Do nothing or handle silently
+//         setIsLoggedin(false);
+//       } else {
+//         toast.error(error.message);  // Show toast only for other errors
+//       }
+//     }
+//   };
+  
+//   const getUserData = async () => {  // Fixed arrow function syntax
+//     try {
+//       const { data } = await axios.get(backendUrl + "/api/user/data");
+//       data.success ? setUserData(data.userData) : toast.error(data.message);
+//     } catch (error) {
+//       toast.error(error.message);
+//     }
+//   };
+//   // whenever the page is loaded we call this function using useEffect
+//   useEffect(()=>{
+//     getAuthState();
+//   },[])
+//   const value = {
+//     backendUrl,
+//     isLoggedin,
+//     setIsLoggedin,
+//     userData,
+//     setUserData
+//     ,getUserData
+//   };
+//   console.log(userData);
+//   return (
+//     <AppContent.Provider value={value}>
+//       {props.children}
+//     </AppContent.Provider>
+//   );
+// };
+
+import { createContext, useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
-import axios from "axios"
+import axios from "axios";
+
 export const AppContent = createContext();
 
 export const AppContextProvider = (props) => {
-  axios.defaults.withCredentials =true;
-  // Corrected environment variable usage
-//   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    // console.log("Backend URL:", backendUrl); // Debugging
+  axios.defaults.withCredentials = true;
 
-
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
   const [isLoggedin, setIsLoggedin] = useState(false);
-  const [userData, setUserData] = useState(null); // Changed from `false` to `null`
-  
-  const getAuthState = async () => {
+  const [userData, setUserData] = useState(null);
+
+  const getAuthState = useCallback(async () => {
     try {
-      const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
       if (data.success) {
         setIsLoggedin(true);
         getUserData();
+      } else {
+        setIsLoggedin(false);
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        // Do nothing or handle silently
-        setIsLoggedin(false);
+        setIsLoggedin(false);  // Silent fail
       } else {
-        toast.error(error.message);  // Show toast only for other errors
+        toast.error(error.response?.data?.message || "Authentication failed");
       }
     }
-  };
-  
-  const getUserData = async () => {  // Fixed arrow function syntax
+  }, [backendUrl]);
+
+  const getUserData = useCallback(async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/user/data");
+      const { data } = await axios.get(`${backendUrl}/api/user/data`);
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || "Failed to fetch user data");
     }
-  };
-  // whenever the page is loaded we call this function using useEffect
-  useEffect(()=>{
+  }, [backendUrl]);
+
+  useEffect(() => {
     getAuthState();
-  },[])
+  }, [getAuthState]);
+
   const value = {
     backendUrl,
     isLoggedin,
     setIsLoggedin,
     userData,
-    setUserData
-    ,getUserData
+    setUserData,
+    getUserData
   };
-  console.log(userData);
+
   return (
     <AppContent.Provider value={value}>
       {props.children}
