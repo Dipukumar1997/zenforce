@@ -6,7 +6,7 @@ export const AppContent = createContext();
 export const AppContextProvider = (props) => {
   axios.defaults.withCredentials =true;
   // Corrected environment variable usage
-//   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  //   const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     // console.log("Backend URL:", backendUrl); // Debugging
 
@@ -17,14 +17,14 @@ export const AppContextProvider = (props) => {
   
 
 
-  const setAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
-  };
+  // const setAuthHeader = () => {
+  //   const token = localStorage.getItem("token");
+  //   // if (token) {
+  //   //   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //   // } else {
+  //   //   delete axios.defaults.headers.common["Authorization"];
+  //   // }
+  // };
   
   // const getAuthState = async () => {
   //   const token = localStorage.getItem("token");
@@ -45,10 +45,11 @@ export const AppContextProvider = (props) => {
   // };
   
   const getAuthState = async () => {
-    setAuthHeader();  // ✅ Set token before making the request
+    const token = localStorage.getItem("token");
+    // setAuthHeader();  // ✅ Set token before making the request
   
     try {
-      const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+      const { data } = await axios.get(backendUrl + '/api/auth/is-auth',{token});
       if (data.success) {
         setIsLoggedin(true);
         getUserData();
@@ -57,6 +58,7 @@ export const AppContextProvider = (props) => {
       if (error.response && error.response.status === 401) {
         setIsLoggedin(false);
       } else {
+        console.log("error ingetAuthstates ")
         toast.error(error.message);
       }
     }
@@ -73,7 +75,7 @@ export const AppContextProvider = (props) => {
 
 
   const getUserData = async () => {
-    setAuthHeader();  // ✅ Set token before making the request
+    // setAuthHeader();  // ✅ Set token before making the request
   
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
@@ -86,7 +88,7 @@ export const AppContextProvider = (props) => {
 
   // whenever the page is loaded we call this function using useEffect
   useEffect(()=>{
-    setAuthHeader();    // ✅ Attach token on page load
+    // setAuthHeader();    // ✅ Attach token on page load
   getAuthState();
     // getAuthState();
   },[])
