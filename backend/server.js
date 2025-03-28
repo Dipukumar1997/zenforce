@@ -48,6 +48,19 @@ app.use(
   })
 );
 
+// / ✅ Add Manual CORS Headers 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://zenforce.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Test route
 app.get("/", (req, res) => {
   res.send("API working");
