@@ -36,7 +36,7 @@ const PORT = process.env.PORT || 5000;  // Use Vercel's PORT
 connectDB();
 
 // CORS Configuration
-const allowedOrigins = ["https://zenforce.vercel.app"];
+const allowedOrigins = ["https://zenforce.vercel.app","http://localhost:3000"];
 app.use(express.json());
 app.use(cookieParser());
 app.use(

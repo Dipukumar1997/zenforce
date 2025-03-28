@@ -18,6 +18,7 @@ const userAuth = async (req, res, next) => {
 
         next();
     } catch (error) {
+        console.log("error in userauth");
         res.status(500).json({ success: false, message: error.message });
     }
 };

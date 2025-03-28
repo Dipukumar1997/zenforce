@@ -70,6 +70,7 @@ import Developer from "./components/Developer/Developer.jsx";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import EmailVerify from "./components/Login/EmailVerify.jsx";
+import NewsApi from "./components/NewsApis/NewsApi.jsx";
 
 // import ResetPassword from "./components/Login/ResetPassword.js";
 
@@ -95,6 +96,10 @@ function Homee() {
           <span>Login / Register</span>
           <img src={assets.arrow_icon} className="w-6 h-6" />
         </button>
+        <button onClick={() => navigate("/news")} className="flex space-x-2 bg-green-500 text-white font-semibold px-3 py-1 rounded-lg shadow-md hover:bg-green-600 transition" >
+          <span>News Api</span>
+          <img src={assets.arrow_icon} className="w-6 h-6" />
+        </button>
 
       </div>
     </> 
@@ -111,7 +116,8 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/developer" element={<Developer/>} />
-        <Route  path="/email-verify" element={<EmailVerify/>}                           />
+        <Route  path="/email-verify" element={<EmailVerify/>} />
+        <Route  path="/news" element={<NewsApi/>} />
       </Routes>
       {/* </ToastContainer> */}
     {/* // </Router> */}
