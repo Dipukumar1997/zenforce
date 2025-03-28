@@ -217,6 +217,7 @@ export const isAuthenticated = async (req , res)=>{
     try {
         return res.json({success:true})
     } catch (error) {
+        console.error("Error:", error);  // ✅ Log the error
         return res.json({success:false , message:error.message})
     }
 }
