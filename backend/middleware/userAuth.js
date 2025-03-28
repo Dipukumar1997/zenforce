@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
     // const token = req.cookies?.token;  // Use optional chaining to avoid crashes
-    let token = req.cookies.token || req.headers.authorization?.split(" ")[1];  // ✅ Use `let`
+    let token = req.cookies.token || req.headers.authorization;  // ✅ Use `let`
     // if (!token) {
     //     token = req.headers.authorization?.split(" ")[1];  // Bearer <token>
     // }
