@@ -75,29 +75,70 @@ export const Navbar = () => {
     const { userData, backendUrl, setUserData, setIsLoggedin } = useContext(AppContent);
     const [loading, setLoading] = useState(false);  // Added loading state
 
+    // const logout = async () => {
+    //     setLoading(true);  // Show loader during logout
+    //     try {
+    //         axios.defaults.withCredentials = true;
+    //         // const { data } = await axios.post(backendUrl + '/api/auth/logout');
+    //         const { data } = await axios.post(`${backendUrl}/api/auth/logout`, {}, {
+    //             withCredentials: true  // Ensure cookie removal
+    //         });
+    //         if (data.success) {
+    //             localStorage.removeItem("token");
+    //             setIsLoggedin(false);
+    //             setUserData(false);
+    //             navigate("/developer");
+    //             toast.success("Logged out successfully");
+    //         }
+    //     } catch (error) {
+    //         console.error("Logout error:", error);
+    //         toast.error(error.message);
+    //     } finally {
+    //         setLoading(false);  // Hide loader after logout
+    //     }
+    // };
+
     const logout = async () => {
         setLoading(true);  // Show loader during logout
         try {
+            const token = localStorage.getItem("token");
+    
+            if (!token) {
+                throw new Error("No token found, please login again.");
+            }
+    
             axios.defaults.withCredentials = true;
-            // const { data } = await axios.post(backendUrl + '/api/auth/logout');
-            const { data } = await axios.post(`${backendUrl}/api/auth/logout`, {}, {
-                withCredentials: true  // Ensure cookie removal
-            });
+    
+            // ✅ Send Bearer token in the Authorization header
+            const { data } = await axios.post(
+                `${backendUrl}/api/auth/logout`,
+                {},  // Empty body
+                {
+                    withCredentials: true,  // Ensure cookie removal
+                    headers: {
+                        "Authorization": `Bearer ${token}`  // ✅ Send token properly
+                    }
+                }
+            );
+    
             if (data.success) {
-                localStorage.removeItem("token");
+                localStorage.removeItem("token");    // Clear token
                 setIsLoggedin(false);
                 setUserData(false);
-                navigate("/developer");
+                navigate("/developer");              // Redirect after logout
                 toast.success("Logged out successfully");
             }
         } catch (error) {
             console.error("Logout error:", error);
-            toast.error(error.message);
+            
+            // Display the correct error message
+            const errorMessage = error.response?.data?.message || error.message;
+            toast.error(errorMessage);
         } finally {
             setLoading(false);  // Hide loader after logout
         }
     };
-
+    
     const sendVerificationotp = async () => {
         setLoading(true);  // Show loader during verification
         try {
