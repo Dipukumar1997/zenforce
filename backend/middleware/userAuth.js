@@ -1,34 +1,36 @@
 import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
-    
-    // const token = req.cookies?.token;  // Use optional chaining to avoid crashes
-    // let token = req.cookies.token || req.headers.authorization;  // ✅ Use `let`
-    let token = req.cookies.token || localStorage.getItem("token");  // ✅ Use `let`
-    console.log("req.headers.authorization in userAuth from local  " , token )
-    // if (!token) {
-    //     token = req.headers.authorization?.split(" ")[1];  // Bearer <token>
-    // }
+  try {
+    let token;
+
+    // ✅ Extract token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];  // Extract Bearer token
+    } else if (req.cookies.token) {
+      token = req.cookies.token;         // Fallback to cookie token
+    }
 
     if (!token) {
-        return res.status(401).json({ success: false, message: "Not authorized, login again" });
+      return res.status(401).json({ success: false, message: "Not authorized, login again" });
     }
 
-    try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        
-        if (!decodedToken?.id) {
-            return res.status(401).json({ success: false, message: "Invalid token, login again" });
-        }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.body.userId = decodedToken.id;
-        req.body.email = decodedToken.email;
-
-        next();
-    } catch (error) {
-        console.error("Error in userAuth middleware:", error);
-        res.status(500).json({ success: false, message: error.message });
+    if (!decodedToken?.id) {
+      return res.status(401).json({ success: false, message: "Invalid token, login again" });
     }
+
+    // ✅ Attach decoded user info to request body
+    req.body.userId = decodedToken.id;
+    req.body.email = decodedToken.email;
+
+    next();
+  } catch (error) {
+    console.error("Error in userAuth middleware:", error);
+    res.status(401).json({ success: false, message: "Unauthorized or Invalid token" });
+  }
 };
 
 export default userAuth;
