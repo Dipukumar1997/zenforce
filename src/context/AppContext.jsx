@@ -15,7 +15,38 @@ export const AppContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null); // Changed from `false` to `null`
   
+
+
+  const setAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  };
+  
+  // const getAuthState = async () => {
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
+  //     if (data.success) {
+  //       setIsLoggedin(true);
+  //       getUserData();
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       // Do nothing or handle silently
+  //       setIsLoggedin(false);
+  //     } else {
+  //       toast.error(error.message);  // Show toast only for other errors
+  //     }
+  //   }
+  // };
+  
   const getAuthState = async () => {
+    setAuthHeader();  // ✅ Set token before making the request
+  
     try {
       const { data } = await axios.get(backendUrl + '/api/auth/is-auth');
       if (data.success) {
@@ -24,26 +55,40 @@ export const AppContextProvider = (props) => {
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        // Do nothing or handle silently
         setIsLoggedin(false);
       } else {
-        toast.error(error.message);  // Show toast only for other errors
+        toast.error(error.message);
       }
     }
   };
+  // const getUserData = async () => {  // Fixed arrow function syntax
+  //   try {
+  //     const { data } = await axios.get(backendUrl + "/api/user/data");
+  //     data.success ? setUserData(data.userData) : toast.error(data.message);
+  //   } catch (error) {
+  //     console.error("Error details in app context  in getAuthState:", error);
+  //     toast.error(error.message);
+  //   }
+  // };
+
+
+  const getUserData = async () => {
+    setAuthHeader();  // ✅ Set token before making the request
   
-  const getUserData = async () => {  // Fixed arrow function syntax
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
-      console.error("Error details in app context  in getAuthState:", error);
+      console.error("Error details:", error);
       toast.error(error.message);
     }
   };
+
   // whenever the page is loaded we call this function using useEffect
   useEffect(()=>{
-    getAuthState();
+    setAuthHeader();    // ✅ Attach token on page load
+  getAuthState();
+    // getAuthState();
   },[])
   const value = {
     backendUrl,
