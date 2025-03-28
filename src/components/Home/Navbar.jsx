@@ -79,13 +79,19 @@ export const Navbar = () => {
         setLoading(true);  // Show loader during logout
         try {
             axios.defaults.withCredentials = true;
-            const { data } = await axios.post(backendUrl + '/api/auth/logout');
+            // const { data } = await axios.post(backendUrl + '/api/auth/logout');
+            const { data } = await axios.post(`${backendUrl}/api/auth/logout`, {}, {
+                withCredentials: true  // Ensure cookie removal
+            });
             if (data.success) {
+                localStorage.removeItem("token");
                 setIsLoggedin(false);
                 setUserData(false);
                 navigate("/developer");
+                toast.success("Logged out successfully");
             }
         } catch (error) {
+            console.error("Logout error:", error);
             toast.error(error.message);
         } finally {
             setLoading(false);  // Hide loader after logout

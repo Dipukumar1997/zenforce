@@ -39,7 +39,7 @@ export const register = async (req, res) => { // ✅ Fixed: Uncommented and prop
             text: `welcome to our websoite running on the text port by the way your email id is ${email} id `
         }
         await trensporter.sendMail(mailOptions);
-        return res.json({ success: true, message: "user created succesfully " });
+        return res.json({ success: true, message: "user created succesfully " , token });
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
@@ -86,7 +86,7 @@ export const login = async (req, res) => {
         // return res.json({ success: true, message: "logout successfully " }); // ✅ Fixed: Changed `success: false` to `success: true
 
 
-        return res.json({ success: true , message: "Login Successfull" });
+        return res.json({ success: true , message: "Login Successfull"  , token});
     } catch (error) {
         res.json({ success: false, message: error.message });
     }

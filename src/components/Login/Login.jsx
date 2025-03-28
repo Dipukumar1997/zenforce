@@ -72,6 +72,10 @@ const onSubmitHandler = async (e) => {
       data = response.data;
 
       if (data.success) {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        // localStorage.setItem("token", data.token);
         toast.success(data.message);
         getUserData();
         setIsLoggedin(true);
@@ -88,6 +92,10 @@ const onSubmitHandler = async (e) => {
       data = response.data;
 
       if (data.success) {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        // localStorage.setItem("token", data.token);
         toast.success(data.message);
         getUserData();
         setIsLoggedin(true);

@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
-    const token = req.cookies?.token;  // Use optional chaining to avoid crashes
+    // const token = req.cookies?.token;  // Use optional chaining to avoid crashes
+    let token = req.cookies.token || req.headers.authorization?.split(" ")[1];  // ✅ Use `let`
+    // if (!token) {
+    //     token = req.headers.authorization?.split(" ")[1];  // Bearer <token>
+    // }
+
     if (!token) {
         return res.status(401).json({ success: false, message: "Not authorized, login again" });
     }
@@ -18,7 +23,7 @@ const userAuth = async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.log("error in userauth");
+        console.error("Error in userAuth middleware:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
