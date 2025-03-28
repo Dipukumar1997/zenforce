@@ -46,19 +46,23 @@ export const AppContextProvider = (props) => {
   
   const getAuthState = async () => {
     const token = localStorage.getItem("token");
+    console.log("your token is " , token);
     // setAuthHeader();  // ✅ Set token before making the request
   
     try {
       const { data } = await axios.get(backendUrl + '/api/auth/is-auth',{token});
+       console.log("printing the data in try block "+ data);
       if (data.success) {
+        console.log("dat.sucees is true ")
         setIsLoggedin(true);
         getUserData();
+        console.log("printing the getUserdata"+getUserData());
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setIsLoggedin(false);
       } else {
-        console.log("error ingetAuthstates ")
+        console.log("error in get Authstates ")
         toast.error(error.message);
       }
     }
@@ -79,6 +83,7 @@ export const AppContextProvider = (props) => {
   
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
+      console.log("printg the data from getUserdata " , data  )
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
       console.error("Error details:", error);

@@ -1,8 +1,11 @@
 import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
+    
     // const token = req.cookies?.token;  // Use optional chaining to avoid crashes
-    let token = req.cookies.token || req.headers.authorization;  // ✅ Use `let`
+    // let token = req.cookies.token || req.headers.authorization;  // ✅ Use `let`
+    let token = req.cookies.token || localStorage.getItem("token");  // ✅ Use `let`
+    console.log("req.headers.authorization in userAuth from local  " , token )
     // if (!token) {
     //     token = req.headers.authorization?.split(" ")[1];  // Bearer <token>
     // }
