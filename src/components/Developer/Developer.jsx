@@ -24,14 +24,16 @@
 import React, { useContext } from "react";
 import { Navbar } from "../Home/Navbar";
 import { AppContent } from "../../context/AppContext";
-import { Link } from "react-router-dom"; // Import Link
+import { Link, useNavigate } from "react-router-dom"; // Import Link
 
 export default function Developer() {
   const { userData } = useContext(AppContent);
-
+   const navigate = useNavigate();
   // Determine if the user has any access to notes (view or full)
   const hasNotesAccess = userData?.notesAccessLevel === 'view' || userData?.notesAccessLevel === 'full';
-
+    const moveToDeveloperPage = () => {
+        navigate("/developer/notes");
+      }
   return (
     <>
       <Navbar />
@@ -54,9 +56,11 @@ export default function Developer() {
         )}
 
         {/* Optional: Message if user doesn't have access */}
-        {!hasNotesAccess && userData && userData.notesAccessLevel === 'none' && (
+        {!hasNotesAccess && userData && userData.notesAccessLevel === 'none' ||'view' && (
              <p className="mt-4 text-red-500 text-md">
-                 Unlock premium access to manage your notes!
+               <button className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700" onClick={moveToDeveloperPage}>
+                Go To Notes Page
+              </button>
              </p>
         )}
       </div>
