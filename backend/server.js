@@ -36,9 +36,9 @@ console.log("SMTP_PASS:", process.env.SMTP_PASS ? "Exists" : "Missing");
 const app = express();
 const PORT = process.env.PORT || 5000;  // Use Vercel's PORT
 connectDB();
-//https://zenforce.vercel.app","http://localhost:3000"
+//https://zenforce.vercel.app","http://localhost:3000" http://localhost:5001
 // CORS Configuration
-const allowedOrigins = ["http://localhost:5001"];
+const allowedOrigins = ["https://zenforce.vercel.app"];
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -52,7 +52,7 @@ app.use(
 
 // / ✅ Add Manual CORS Headers 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5001");
+  res.header("Access-Control-Allow-Origin", "https://zenforce.vercel.app");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
