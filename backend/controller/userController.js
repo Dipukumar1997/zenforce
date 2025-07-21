@@ -10,6 +10,7 @@ export const getuserdata =  async (req, res) => {
             success:true ,
             userData:{
                 name :user.name,
+                notesAccessLevel:user.notesAccessLevel,
                 isAccountverified:user.isAccountverified
             }
         });

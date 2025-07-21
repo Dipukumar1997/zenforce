@@ -88,7 +88,7 @@ const onSubmitHandler = async (e) => {
         email,
         password,
       }, { withCredentials: true });
-
+      console.log("response  -->>" + response);
       data = response.data;
 
       if (data.success) {
@@ -101,6 +101,7 @@ const onSubmitHandler = async (e) => {
         setIsLoggedin(true);
         Navigate("/developer");
       } else {
+        console.log("in error block ")
         toast.error(data.message);
       }
     }

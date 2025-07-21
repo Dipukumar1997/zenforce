@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
 const userAuth = async (req, res, next) => {
   try {
@@ -21,10 +22,11 @@ const userAuth = async (req, res, next) => {
     if (!decodedToken?.id) {
       return res.status(401).json({ success: false, message: "Invalid token, login again" });
     }
-
+     const user = await userModel.findById(decodedToken.id); // Exclude password for security
     // ✅ Attach decoded user info to request body
     req.body.userId = decodedToken.id;
     req.body.email = decodedToken.email;
+    req.user = user;
 
     next();
   } catch (error) {

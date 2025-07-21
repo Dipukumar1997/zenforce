@@ -3,7 +3,6 @@ import { isAuthenticated, login, logout, register, resetPassword, sendResetOtp, 
 import userAuth from "../middleware/userAuth.js";
 const authRouter = express.Router();
 
-// const authRouter a
 
 authRouter.post('/register',register);
 authRouter.post('/login',login);

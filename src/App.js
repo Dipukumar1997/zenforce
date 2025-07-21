@@ -71,6 +71,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import EmailVerify from "./components/Login/EmailVerify.jsx";
 import NewsApi from "./components/NewsApis/NewsApi.jsx";
+import Notes from "./components/Notes/Notes.jsx";
 
 // import ResetPassword from "./components/Login/ResetPassword.js";
 
@@ -118,6 +119,7 @@ function App() {
         <Route path="/developer" element={<Developer/>} />
         <Route  path="/email-verify" element={<EmailVerify/>} />
         <Route  path="/news" element={<NewsApi/>} />
+          <Route path="/developer/notes" element={<Notes />} />
       </Routes>
       {/* </ToastContainer> */}
     {/* // </Router> */}
