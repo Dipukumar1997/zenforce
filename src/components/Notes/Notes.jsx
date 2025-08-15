@@ -847,8 +847,14 @@ export default function Notes() {
     }
     setIsCreating(true); // Start loading for creation
     try {
+      // const response = await axios.post(`${backendUrl}/api/developer/notes`, noteForm, {
+      //   withCredentials: true,
+      // });
       const response = await axios.post(`${backendUrl}/api/developer/notes`, noteForm, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
       });
       setNotes([response.data, ...notes]); // Add new note to the top
       handleCloseNoteModal(); // Close modal and reset form
@@ -869,9 +875,16 @@ export default function Notes() {
     }
     setIsUpdating(true); // Start loading for update
     try {
+      // const response = await axios.put(`${backendUrl}/api/developer/notes/${currentNote._id}`, noteForm, {
+      //   withCredentials: true,
+      // });
       const response = await axios.put(`${backendUrl}/api/developer/notes/${currentNote._id}`, noteForm, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
       });
+
       setNotes(notes.map(note => note._id === response.data._id ? response.data : note));
       handleCloseNoteModal(); // Close modal and reset form
       setError(null); // Clear any previous errors
@@ -889,8 +902,14 @@ export default function Notes() {
     setIsDeleting(id); // Set the ID of the note being deleted to show spinner on its button
 
     try {
-      await axios.delete(`${backendUrl}/api/developer/notes/${id}`, {
-        withCredentials: true,
+      // await axios.delete(`${backendUrl}/api/developer/notes/${id}`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.delete(`${backendUrl}/api/developer/notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
       });
       setNotes(notes.filter(note => note._id !== id));
       setError(null); // Clear any previous errors
