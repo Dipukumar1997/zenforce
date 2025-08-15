@@ -102,7 +102,7 @@
 
 // // NoteCard Component - A separate component for displaying each note
 // const NoteCard = ({ note, canWrite, onEdit, onDelete }) => {
- 
+
 //   return (
 //     <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200 flex flex-col justify-between">
 //       <div>
@@ -805,10 +805,10 @@ export default function Notes() {
   const [isEditing, setIsEditing] = useState(false); // New state to determine modal mode
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-   const [isCreating, setIsCreating] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(null); // Holds the ID of the note being deleted
-
+  const token = localStorage.getItem('token');
 
   // Check access levels
   const canViewNotes = userData?.notesAccessLevel === 'view' || userData?.notesAccessLevel === 'full';
@@ -821,8 +821,14 @@ export default function Notes() {
     setLoading(true);
     setError(null);
     try {
+      // const response = await axios.get(`${backendUrl}/api/developer/notes`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${backendUrl}/api/developer/notes`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
       });
       setNotes(response.data);
     } catch (err) {
@@ -839,7 +845,7 @@ export default function Notes() {
       setError("Title cannot be empty.");
       return;
     }
-     setIsCreating(true); // Start loading for creation
+    setIsCreating(true); // Start loading for creation
     try {
       const response = await axios.post(`${backendUrl}/api/developer/notes`, noteForm, {
         withCredentials: true,
@@ -861,7 +867,7 @@ export default function Notes() {
       setError("Title cannot be empty.");
       return;
     }
-       setIsUpdating(true); // Start loading for update
+    setIsUpdating(true); // Start loading for update
     try {
       const response = await axios.put(`${backendUrl}/api/developer/notes/${currentNote._id}`, noteForm, {
         withCredentials: true,
@@ -1109,7 +1115,7 @@ export default function Notes() {
   //   </>
   // );
 
-   return (
+  return (
     <>
       <Navbar />
       <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
@@ -1243,7 +1249,7 @@ export default function Notes() {
                         disabled={isDeleting === currentNote._id} // Disable if this specific note is being deleted
                       >
                         {isDeleting === currentNote._id ? (
-                           <div className="w-5 h-5 border-2 border-white border-t-transparent border-solid rounded-full animate-spin"></div>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent border-solid rounded-full animate-spin"></div>
                         ) : "Delete Note"}
                       </button>
                     </div>
