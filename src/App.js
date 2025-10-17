@@ -475,10 +475,10 @@ function HomePage() {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             Welcome to <span className="text-blue-600">ZenForce</span>
           </h1>
-          {/* <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Your all-in-one platform for productivity tools, latest news updates, 
             and developer resources. Streamline your workflow with our suite of powerful features.
-          </p> */}
+          </p>
         </div>
 
         {/* Feature Cards */}
