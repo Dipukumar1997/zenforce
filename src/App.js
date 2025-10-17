@@ -341,9 +341,9 @@ function Navigation() {
             <Link to="/cal" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Calculator
             </Link>
-            <Link to="/news" className="text-gray-700 hover:text-blue-600 font-medium transition">
+            {/* <Link to="/news" className="text-gray-700 hover:text-blue-600 font-medium transition">
               News
-            </Link>
+            </Link> */}
             <Link to="/developer" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Developer
             </Link>
@@ -387,9 +387,9 @@ function Navigation() {
             <Link to="/cal" className="block text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-2 rounded transition">
               Calculator
             </Link>
-            <Link to="/news" className="block text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-2 rounded transition">
+            {/* <Link to="/news" className="block text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-2 rounded transition">
               News
-            </Link>
+            </Link> */}
             <Link to="/developer" className="block text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-2 rounded transition">
               Developer
             </Link>
@@ -475,10 +475,10 @@ function HomePage() {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             Welcome to <span className="text-blue-600">ZenForce</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          {/* <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Your all-in-one platform for productivity tools, latest news updates, 
             and developer resources. Streamline your workflow with our suite of powerful features.
-          </p>
+          </p> */}
         </div>
 
         {/* Feature Cards */}
@@ -499,7 +499,7 @@ function HomePage() {
           </div>
 
           {/* News Card */}
-          <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition transform hover:-translate-y-2">
+          {/* <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition transform hover:-translate-y-2">
             <div className="text-green-600 text-5xl mb-4">📰</div>
             <h3 className="text-2xl font-bold mb-3">Latest News</h3>
             <p className="text-gray-600 mb-4">
@@ -511,7 +511,7 @@ function HomePage() {
             >
               Read News
             </button>
-          </div>
+          </div> */}
 
           {/* Developer Card */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition transform hover:-translate-y-2">
