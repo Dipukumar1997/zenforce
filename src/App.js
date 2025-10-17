@@ -449,7 +449,7 @@ function Footer() {
             <h3 className="text-xl font-bold mb-4">Our Tools</h3>
             <ul className="space-y-2">
               <li><Link to="/cal" className="text-gray-400 hover:text-white transition">Calculator</Link></li>
-              <li><Link to="/news" className="text-gray-400 hover:text-white transition">News Feed</Link></li>
+              {/* <li><Link to="/news" className="text-gray-400 hover:text-white transition">News Feed</Link></li> */}
               <li><Link to="/developer/notes" className="text-gray-400 hover:text-white transition">Notes</Link></li>
             </ul>
           </div>
