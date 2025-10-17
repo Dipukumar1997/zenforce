@@ -1,117 +1,98 @@
 import React, { useState, useEffect } from 'react';
 
 export default function NewsApi() {
-  // Get API Key from environment variable
-  const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+  // GNews API Key - Get from https://gnews.io/
+  const API_KEY = process.env.REACT_APP_GNEWS_API_KEY;
   
   const [articles, setArticles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
-  const pageSize = 10;
 
-  // Fetch news when component loads
   useEffect(() => {
-    fetchRandomNews(1);
+    // Show a message if API key is missing
+    if (!API_KEY) {
+      console.error('GNews API key is missing! Add REACT_APP_GNEWS_API_KEY to your .env file');
+      return;
+    }
+    fetchRandomNews();
   }, []);
 
-  // Function to fetch random/default news
-  const fetchRandomNews = async (page = 1) => {
+  // Fetch default/trending news
+  const fetchRandomNews = async () => {
     setLoading(true);
     try {
-      const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
+      // GNews API endpoint - NO CORS ISSUES
+      const apiUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=${API_KEY}`;
+      
       const response = await fetch(apiUrl);
       const data = await response.json();
       
+      console.log('GNews Response:', data); // Debug
+      
       if (data.articles) {
         setArticles(data.articles);
-        setTotalResults(data.totalResults);
-        setCurrentPage(page);
+      } else if (data.errors) {
+        console.error('GNews API Error:', data.errors);
+        alert('Error: ' + data.errors[0]);
       }
     } catch (error) {
-      console.error('Error fetching random news:', error);
+      console.error('Error fetching news:', error);
+      alert('Failed to fetch news. Check console for details.');
       setArticles([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Function to fetch news based on search query
-  const fetchNewsByQuery = async (query, page = 1) => {
+  // Fetch news based on search query
+  const fetchNewsByQuery = async (query) => {
     setLoading(true);
     try {
-      const apiUrl = `https://newsapi.org/v2/everything?q=${query}&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
+      // GNews search endpoint
+      const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=en&max=10&apikey=${API_KEY}`;
+      
       const response = await fetch(apiUrl);
       const data = await response.json();
       
+      console.log('GNews Search Response:', data); // Debug
+      
       if (data.articles) {
         setArticles(data.articles);
-        setTotalResults(data.totalResults);
-        setCurrentPage(page);
+      } else if (data.errors) {
+        console.error('GNews API Error:', data.errors);
+        alert('Error: ' + data.errors[0]);
       }
     } catch (error) {
-      console.error('Error fetching news by query:', error);
+      console.error('Error fetching news:', error);
+      alert('Failed to fetch news. Check console for details.');
       setArticles([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle search button click
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      fetchNewsByQuery(searchQuery, 1);
+      fetchNewsByQuery(searchQuery);
     } else {
-      fetchRandomNews(1);
+      fetchRandomNews();
     }
   };
 
-  // Handle pagination
-  const handleNextPage = () => {
-    const nextPage = currentPage + 1;
-    if (searchQuery.trim()) {
-      fetchNewsByQuery(searchQuery, nextPage);
-    } else {
-      fetchRandomNews(nextPage);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handlePrevPage = () => {
-    const prevPage = currentPage - 1;
-    if (prevPage < 1) return;
-    
-    if (searchQuery.trim()) {
-      fetchNewsByQuery(searchQuery, prevPage);
-    } else {
-      fetchRandomNews(prevPage);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Handle Enter key press
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
 
-  // Truncate text to specific length
   const truncateText = (text, maxLength) => {
-    if (!text) return '';
+    if (!text) return 'No description available';
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
   };
 
-  // Open article in new window
   const handleCardClick = (url) => {
     window.open(url, '_blank');
   };
-
-  // Calculate total pages
-  const totalPages = Math.ceil(totalResults / pageSize);
-  const hasNextPage = currentPage < totalPages;
-  const hasPrevPage = currentPage > 1;
 
   // Inline Styles
   const styles = {
@@ -141,7 +122,6 @@ export default function NewsApi() {
       letterSpacing: '1px',
       fontSize: '2.5rem',
       fontWeight: 'bold',
-      cursor: 'default',
     },
     searchContainer: {
       display: 'flex',
@@ -157,7 +137,6 @@ export default function NewsApi() {
       fontSize: '16px',
       color: '#1f2937',
       outline: 'none',
-      transition: 'all 0.3s',
       backgroundColor: 'white',
     },
     searchButton: {
@@ -169,7 +148,6 @@ export default function NewsApi() {
       cursor: 'pointer',
       borderRadius: '8px',
       fontWeight: '600',
-      transition: 'all 0.3s',
       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     },
     blogContainer: {
@@ -186,7 +164,6 @@ export default function NewsApi() {
       overflow: 'hidden',
       cursor: 'pointer',
       backgroundColor: 'white',
-      transition: 'all 0.3s ease',
       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
       display: 'flex',
       flexDirection: 'column',
@@ -208,7 +185,6 @@ export default function NewsApi() {
       fontWeight: '700',
       marginBottom: '0.75rem',
       lineHeight: '1.5',
-      flex: 0,
     },
     blogCardDescription: {
       fontSize: '0.95rem',
@@ -241,48 +217,43 @@ export default function NewsApi() {
       fontSize: '1.2rem',
       color: '#6b7280',
     },
-    paginationContainer: {
-      maxWidth: '1200px',
-      margin: '3rem auto 2rem',
-      padding: '0 20px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '20px',
-      flexWrap: 'wrap',
-    },
-    paginationButton: {
-      padding: '12px 24px',
-      backgroundColor: '#2563eb',
-      color: 'white',
-      border: 'none',
-      fontSize: '16px',
-      cursor: 'pointer',
+    apiKeyWarning: {
+      gridColumn: '1 / -1',
+      textAlign: 'center',
+      padding: '4rem',
+      fontSize: '1.2rem',
+      color: '#dc2626',
+      backgroundColor: '#fee2e2',
       borderRadius: '8px',
-      fontWeight: '600',
-      transition: 'all 0.3s',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    },
-    paginationButtonDisabled: {
-      padding: '12px 24px',
-      backgroundColor: '#d1d5db',
-      color: '#9ca3af',
-      border: 'none',
-      fontSize: '16px',
-      cursor: 'not-allowed',
-      borderRadius: '8px',
-      fontWeight: '600',
-    },
-    pageInfo: {
-      fontSize: '1rem',
-      color: '#4b5563',
-      fontWeight: '500',
+      margin: '20px',
     },
   };
 
+  // Show warning if API key is missing
+  if (!API_KEY) {
+    return (
+      <div style={styles.newsContainer}>
+        <nav style={styles.newsNav}>
+          <div style={styles.navContent}>
+            <div style={styles.newsLogo}>News.</div>
+          </div>
+        </nav>
+        <main style={styles.blogContainer}>
+          <div style={styles.apiKeyWarning}>
+            <h2>⚠️ API Key Missing!</h2>
+            <p>Please add your GNews API key to the .env file:</p>
+            <code>REACT_APP_GNEWS_API_KEY=your_key_here</code>
+            <p style={{ marginTop: '20px' }}>
+              Get your free key at: <a href="https://gnews.io" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb' }}>https://gnews.io</a>
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.newsContainer}>
-      {/* Navigation Bar */}
       <nav style={styles.newsNav}>
         <div style={styles.navContent}>
           <div style={styles.newsLogo}>News.</div>
@@ -294,36 +265,17 @@ export default function NewsApi() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
               style={styles.searchInput}
-              onFocus={(e) => e.target.style.borderColor = '#10b981'}
-              onBlur={(e) => e.target.style.borderColor = 'transparent'}
             />
-            <button
-              id="search-button"
-              onClick={handleSearch}
-              style={styles.searchButton}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#059669';
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#10b981';
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
-              }}
-            >
+            <button onClick={handleSearch} style={styles.searchButton}>
               Search
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Blog Container */}
       <main style={styles.blogContainer}>
         {loading ? (
-          <div style={styles.loading}>
-            <div>Loading news...</div>
-          </div>
+          <div style={styles.loading}>Loading news...</div>
         ) : articles.length > 0 ? (
           articles.map((article, index) => (
             <div
@@ -340,11 +292,11 @@ export default function NewsApi() {
               }}
             >
               <img
-                src={article.urlToImage || 'https://via.placeholder.com/400x250?text=News'}
+                src={article.image || 'https://via.placeholder.com/400x250?text=News'}
                 alt={article.title}
                 style={styles.blogCardImage}
                 onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/400x250?text=News';
+                  e.target.src = 'https://via.placeholder.com/400x250?text=No+Image';
                 }}
               />
               <div style={styles.blogCardContent}>
@@ -368,55 +320,6 @@ export default function NewsApi() {
           </div>
         )}
       </main>
-
-      {/* Pagination */}
-      {!loading && articles.length > 0 && (
-        <div style={styles.paginationContainer}>
-          <button
-            onClick={handlePrevPage}
-            disabled={!hasPrevPage}
-            style={hasPrevPage ? styles.paginationButton : styles.paginationButtonDisabled}
-            onMouseEnter={(e) => {
-              if (hasPrevPage) {
-                e.target.style.backgroundColor = '#1d4ed8';
-                e.target.style.transform = 'translateY(-2px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (hasPrevPage) {
-                e.target.style.backgroundColor = '#2563eb';
-                e.target.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            ← Previous
-          </button>
-
-          <div style={styles.pageInfo}>
-            Page {currentPage} of {totalPages > 0 ? totalPages : 1}
-          </div>
-
-          <button
-            onClick={handleNextPage}
-            disabled={!hasNextPage}
-            style={hasNextPage ? styles.paginationButton : styles.paginationButtonDisabled}
-            onMouseEnter={(e) => {
-              if (hasNextPage) {
-                e.target.style.backgroundColor = '#1d4ed8';
-                e.target.style.transform = 'translateY(-2px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (hasNextPage) {
-                e.target.style.backgroundColor = '#2563eb';
-                e.target.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            Next →
-          </button>
-        </div>
-      )}
     </div>
   );
 }
