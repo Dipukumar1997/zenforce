@@ -299,20 +299,20 @@ export default function Blog() {
                   e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
                 }}
               >
-                {/* <img
-                  src={blog.coverImage}
+                <img
+                  src={blog.image}
                   alt={blog.title}
                   style={styles.blogImage}
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/400x250?text=Blog+Post';
                   }}
-                /> */}
+                />
                 {/* // In your Blog.js, update the image source: */}
-                  <img 
+                  {/* <img 
                     src={`${API_URL}${blog.image}`}  // Add API_URL before image path
                     alt={blog.title}
                     style={styles.blogImage}
-                  />
+                  /> */}
 
                 <div style={styles.blogContent}>
                   <span style={styles.blogCategory}>{blog.category}</span>
