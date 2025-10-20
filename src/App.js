@@ -277,7 +277,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/developer" element={<Developer />} />
             <Route path="/email-verify" element={<EmailVerify />} />
-            <Route path="/news" element={<NewsApi />} />
+            <Route path="/news" element={<Blog />} />
             <Route path="/developer/notes" element={<Notes />} />
             
             <Route path="/about" element={<About />} />
